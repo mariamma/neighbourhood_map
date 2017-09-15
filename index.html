@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Neighbourhood Map</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+	<link rel="stylesheet" type="text/css" href="responsive.css">
+</head>
+<body>
+	<header class="header" id="header">
+		<h2 id="slideHeading" style="color:#818181; text-align: center;">Bart Locations</h2>	
+		<a id="menu" class="header__menu">
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+		    <path d="M2 6h20v3H2zm0 5h20v3H2zm0 5h20v3H2z"/>
+		</svg>
+		</a>
+	</header>
+
+	<nav id="drawer" class="nav">
+		<div style="text-align: center;">
+		  	<input type="text" value="Station location" id="stationinput">
+		  	<a href="#" class="btn btn-info btn-md">
+	          <span class="glyphicon glyphicon-filter"></span> Filter 
+	        </a>
+        </div>
+      	<ul class="nav__list" data-bind="foreach:locationList()">
+      		<li class="nav__item"><span data-bind="text:locationName"></span></li>
+      	</ul>
+    </nav>
+
+	<div id="map"></div>
+
+	<script>
+		var map;
+		function initMap() {
+       // TODO: use a constructor to create a new map JS object. You can use the coordinates
+       // we used, 40.7413549, -73.99802439999996 or your own!
+        map = new google.maps.Map(document.getElementById("map"),{
+            center: {lat:40.7413549, lng:-73.99802439999996},
+            zoom:11
+         });
+     }
+	</script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBxM7ybr9xCOF45j3UWwkvwhVeq__i02U4&callback=initMap" async defer></script>
+
+	 <script>
+      /*
+       * Open the drawer when the menu ison is clicked.
+       */
+      var menu = document.querySelector('#menu');
+      var drawer = document.querySelector('.nav');
+
+      menu.addEventListener('click', function(e) {
+        drawer.classList.toggle('open');
+        var el = document.getElementById("map")
+        var headerTag = document.getElementById("header");
+        var menuEl = document.getElementById("menu");
+        var slideheading = document.getElementById("slideHeading");
+        if ( el.style.marginLeft==="300px" ) {
+		    el.style.marginLeft="0px";
+		    menuEl.style.marginLeft="0px";
+		    headerTag.style.marginLeft="0px";
+		} else {
+		    el.style.marginLeft="300px";
+		    menuEl.style.marginLeft="300px";
+		    headerTag.style.marginLeft="300px";
+		}
+        e.stopPropagation();
+      });
+    </script>
+	<script src="js/lib/knockout-3.2.0.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
