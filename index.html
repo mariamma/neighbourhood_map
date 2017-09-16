@@ -20,7 +20,7 @@
 
 	<nav id="drawer" class="nav">
 		<div style="text-align: center;">
-		  	<input type="text" value="Station location" id="stationinput">
+		  	<input type="text" placeholder="Station location" id="stationinput" data-bind="event:{keyup: handleFilterKeyUp}">
 		  	<a href="#" class="btn btn-info btn-md">
 	          <span class="glyphicon glyphicon-filter"></span> Filter 
 	        </a>
