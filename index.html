@@ -11,7 +11,7 @@
 <body>
 	<header class="header" id="header">
 		<h2 id="slideHeading" style="color:#818181; text-align: center;">Bart Locations</h2>	
-		<a id="menu" class="header__menu">
+		<a id="menu" class="header__menu" data-bind="click:handleMenuClick">
 		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 		    <path d="M2 6h20v3H2zm0 5h20v3H2zm0 5h20v3H2z"/>
 		</svg>
@@ -32,31 +32,6 @@
 
 	<div id="map" data-bind="googlemap"></div>
 
-	 <script>
-      /*
-       * Open the drawer when the menu ison is clicked.
-       */
-      var menu = document.querySelector('#menu');
-      var drawer = document.querySelector('.nav');
-
-      menu.addEventListener('click', function(e) {
-        drawer.classList.toggle('open');
-        var el = document.getElementById("map")
-        var headerTag = document.getElementById("header");
-        var menuEl = document.getElementById("menu");
-        var slideheading = document.getElementById("slideHeading");
-        if ( el.style.marginLeft==="300px" ) {
-		    el.style.marginLeft="0px";
-		    menuEl.style.marginLeft="0px";
-		    headerTag.style.marginLeft="0px";
-		} else {
-		    el.style.marginLeft="300px";
-		    menuEl.style.marginLeft="300px";
-		    headerTag.style.marginLeft="300px";
-		}
-        e.stopPropagation();
-      });
-    </script>
 	<script src="js/lib/knockout-3.2.0.js"></script>
     <script src="js/app.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBxM7ybr9xCOF45j3UWwkvwhVeq__i02U4&callback=initMap" async defer></script>

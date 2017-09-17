@@ -42,6 +42,24 @@ var ViewModel = function(){
 	    }
 	};
 
+	this.handleMenuClick = function(){
+		var menu = document.querySelector('#menu');
+      	var drawer = document.querySelector('.nav');
+	    drawer.classList.toggle('open');
+	    var el = document.getElementById("map")
+	    var headerTag = document.getElementById("header");
+	    var menuEl = document.getElementById("menu");
+	    var slideheading = document.getElementById("slideHeading");
+	    if ( el.style.marginLeft==="300px" ) {
+			    el.style.marginLeft="0px";
+			    menuEl.style.marginLeft="0px";
+			    headerTag.style.marginLeft="0px";
+		} else {
+			    el.style.marginLeft="300px";
+			    menuEl.style.marginLeft="300px";
+			    headerTag.style.marginLeft="300px";
+		} 
+	}
 }
 
 ko.applyBindings(new ViewModel());
