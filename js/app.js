@@ -19,6 +19,7 @@ function initMap() {
 	var defaultIcon = makeMarkerIcon('FF5733');
     var highlightedIcon = makeMarkerIcon('FF0000');
     var largeInfowindow = new google.maps.InfoWindow();
+    var bounds = new google.maps.LatLngBounds();
 
 var Location = function(data){
 	this.title = ko.observable(data.title);
@@ -47,6 +48,8 @@ var ViewModel = function(){
             map:map,
             icon: defaultIcon
           });
+
+        bounds.extend(marker.position);
           // Push the marker to our array of markers.
         markers.push(marker);
         marker.addListener('mouseover', function() {
@@ -59,6 +62,8 @@ var ViewModel = function(){
             populateInfoWindow(this, largeInfowindow);
           });
 	});
+
+	map.fitBounds(bounds);
 
 	this.handleFilterKeyUp = function(){
 		var input, filter, ul, li, a;
