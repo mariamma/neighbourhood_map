@@ -9,12 +9,16 @@ var initialLocations=[
           {title: 'Chinatown Homey Space', location: {lat: 40.7180628, lng: -73.9961237}}
 ];
 
+
 function initMap() {
     map = new google.maps.Map(document.getElementById("map"),{
         center: {lat:40.7413549, lng:-73.99802439999996},
         zoom:13
     });
 
+	var defaultIcon = makeMarkerIcon('FF5733');
+    var highlightedIcon = makeMarkerIcon('FF0000');
+    var largeInfowindow = new google.maps.InfoWindow();
 
 var Location = function(data){
 	this.title = ko.observable(data.title);
@@ -40,10 +44,20 @@ var ViewModel = function(){
             position: position,
             title: title,
             animation: google.maps.Animation.DROP,
-            map:map
+            map:map,
+            icon: defaultIcon
           });
           // Push the marker to our array of markers.
         markers.push(marker);
+        marker.addListener('mouseover', function() {
+            this.setIcon(highlightedIcon);
+          });
+        marker.addListener('mouseout', function() {
+            this.setIcon(defaultIcon);
+          });
+        marker.addListener('click', function() {
+            populateInfoWindow(this, largeInfowindow);
+          });
 	});
 
 	this.handleFilterKeyUp = function(){
@@ -88,3 +102,27 @@ ko.applyBindings(new ViewModel());
 
 		
 }
+
+function makeMarkerIcon(markerColor) {
+        var markerImage = new google.maps.MarkerImage(
+          'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ markerColor +
+          '|40|_|%E2%80%A2',
+          new google.maps.Size(21, 40),
+          new google.maps.Point(0, 0),
+          new google.maps.Point(10, 34),
+          new google.maps.Size(22,40));
+        return markerImage;
+      }
+
+ function populateInfoWindow(marker, infowindow) {
+        // Check to make sure the infowindow is not already opened on this marker.
+        if (infowindow.marker != marker) {
+          infowindow.marker = marker;
+          infowindow.setContent('<div>' + marker.title + '</div>');
+          infowindow.open(map, marker);
+          // Make sure the marker property is cleared if the infowindow is closed.
+          infowindow.addListener('closeclick', function() {
+            infowindow.marker = null;
+          });
+        }
+      }     
