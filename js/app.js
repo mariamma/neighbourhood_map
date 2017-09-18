@@ -15,22 +15,6 @@ function initMap() {
         zoom:13
     });
 
-  //       initialLocations.forEach(function(locationItem){
-  //         // Get the position from the location array.
-  //         var position = locationItem.location;
-  //         var title = locationItem.title;
-  //         // Create a marker per location, and put into markers array.
-  //         var marker = new google.maps.Marker({
-  //           position: position,
-  //           title: title,
-  //           animation: google.maps.Animation.DROP,
-  //           map:map
-  //         });
-  //         // Push the marker to our array of markers.
-  //         markers.push(marker);
-		// });
-}
-
 
 var Location = function(data){
 	this.title = ko.observable(data.title);
@@ -45,9 +29,12 @@ var ViewModel = function(){
 		self.locationList.push(new Location(locationItem));
 	});
 
+
 	this.locationList().forEach(function(locationItem){
-		var position = locationItem.location;
-        var title = locationItem.title;
+		console.log("Location : " + locationItem.location() + " " + locationItem.title());
+		var position = locationItem.location();
+        var title = locationItem.title();
+        console.log("Map :: " + map);
           // Create a marker per location, and put into markers array.
         var marker = new google.maps.Marker({
             position: position,
@@ -100,4 +87,4 @@ var ViewModel = function(){
 ko.applyBindings(new ViewModel());
 
 		
-	
+}
