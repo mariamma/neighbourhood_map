@@ -24,16 +24,27 @@ function initMap() {
 var Location = function(data){
 	this.title = ko.observable(data.title);
 	this.location = ko.observable(data.location);
+	var marker = new google.maps.Marker({
+            position: data.location,
+            title: data.title,
+            animation: google.maps.Animation.DROP,
+            map:map,
+            icon: defaultIcon
+          });
+	this.marker = ko.observable(marker);
+	this.active = ko.observable("true");
 }
 
 var ViewModel = function(){
 	var self = this;
 	this.locationList = ko.observableArray([]);
+	this.activeLocationList = ko.observableArray([]);
 
 	initialLocations.forEach(function(locationItem){
 		self.locationList.push(new Location(locationItem));
 	});
 
+	//this.activeLocationList = this.locationList;
 
 	this.locationList().forEach(function(locationItem){
 		console.log("Location : " + locationItem.location() + " " + locationItem.title());
@@ -41,45 +52,58 @@ var ViewModel = function(){
         var title = locationItem.title();
         console.log("Map :: " + map);
           // Create a marker per location, and put into markers array.
-        var marker = new google.maps.Marker({
-            position: position,
-            title: title,
-            animation: google.maps.Animation.DROP,
-            map:map,
-            icon: defaultIcon
+        var marker = locationItem.marker();
+        locationItem.marker().addListener('mouseover', function() {
+            this.setIcon(highlightedIcon);
+          });
+    	locationItem.marker().addListener('mouseout', function() {
+            this.setIcon(defaultIcon);
+          });
+    	locationItem.marker().addListener('click', function() {
+            populateInfoWindow(this, largeInfowindow);
           });
 
         bounds.extend(marker.position);
           // Push the marker to our array of markers.
         markers.push(marker);
-        marker.addListener('mouseover', function() {
-            this.setIcon(highlightedIcon);
-          });
-        marker.addListener('mouseout', function() {
-            this.setIcon(defaultIcon);
-          });
-        marker.addListener('click', function() {
-            populateInfoWindow(this, largeInfowindow);
-          });
+      
 	});
 
 	map.fitBounds(bounds);
+
+	this.locationList().forEach(function(locationItem){
+		if(locationItem.active() == "true"){
+			self.activeLocationList.push(locationItem);
+		}
+	});
 
 	this.handleFilterKeyUp = function(){
 		var input, filter, ul, li, a;
     	input = document.getElementById("stationinput");
     	filter = input.value.toUpperCase();
-    	ul = document.getElementsByClassName("nav__list");
-	    li = ul[0].getElementsByTagName("li");
+    	// ul = document.getElementsByClassName("nav__list");
+	    // li = ul[0].getElementsByTagName("li");
 	    console.log("Filter :: " + filter);
-	    for (var i = 0; i < li.length; i++) {
-	    	a = li[i].getElementsByTagName("span")[0];
-	    	console.log("List value = " + a.innerHTML.toUpperCase() + " " + a.innerHTML.toUpperCase().indexOf(filter));
-	        if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
-	            li[i].style.display = "";
-	        } else {
-	            li[i].style.display = "none";
-	        }
+	    // for (var i = 0; i < li.length; i++) {
+	    // 	a = li[i].getElementsByTagName("span")[0];
+	    // 	console.log("List value = " + a.innerHTML.toUpperCase() + " " + a.innerHTML.toUpperCase().indexOf(filter));
+	    //     if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+	    //         li[i].style.display = "";
+	    //     } else {
+	    //         li[i].style.display = "none";
+	    //     }
+	    // }
+
+	    console.log("Length = " + this.locationList().length);
+	    for(var i=0;i<this.locationList().length;i++){
+	    	var title = this.locationList()[i].title();
+	    	
+	    	if (title.toUpperCase().indexOf(filter) > -1) {
+	    		this.locationList()[i].active("true");
+	    	}else{
+	    		this.locationList()[i].active("null");
+	    		console.log("Inactive title = " + title + " " + this.locationList()[i].active());
+	    	}
 	    }
 	};
 
