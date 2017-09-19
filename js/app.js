@@ -77,23 +77,14 @@ var ViewModel = function(){
 		}
 	});
 
+	this.handleLocationClick = function(location){
+		populateInfoWindow(location.marker(), largeInfowindow);
+	}
+
 	this.handleFilterKeyUp = function(){
 		var input, filter, ul, li, a;
     	input = document.getElementById("stationinput");
     	filter = input.value.toUpperCase();
-    	// ul = document.getElementsByClassName("nav__list");
-	    // li = ul[0].getElementsByTagName("li");
-	    console.log("Filter :: " + filter);
-	    // for (var i = 0; i < li.length; i++) {
-	    // 	a = li[i].getElementsByTagName("span")[0];
-	    // 	console.log("List value = " + a.innerHTML.toUpperCase() + " " + a.innerHTML.toUpperCase().indexOf(filter));
-	    //     if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
-	    //         li[i].style.display = "";
-	    //     } else {
-	    //         li[i].style.display = "none";
-	    //     }
-	    // }
-
 	    console.log("Length = " + this.locationList().length);
 	    for(var i=0;i<this.locationList().length;i++){
 	    	var title = this.locationList()[i].title();

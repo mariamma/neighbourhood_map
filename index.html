@@ -27,7 +27,7 @@
         </div>
       	<ul class="nav__list" data-bind="foreach:locationList()">
       		<div data-bind="if:active">
-      			<li class="nav__item" ><span data-bind="text:title"></span></li>
+      			<li class="nav__item" ><span data-bind="text:title, click:$parent.handleLocationClick"></span></li>
       		</div>
       	</ul>
     </nav>
