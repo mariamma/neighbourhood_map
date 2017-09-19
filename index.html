@@ -26,10 +26,9 @@
 	        </a>
         </div>
       	<ul class="nav__list" data-bind="foreach:locationList()">
-      		<!-- ko if: active -->
-      		<li class="nav__item"><span data-bind="text:title"></span></li>
-      		<li class="nav__item"><span data-bind="text:active"></span></li>
-      		<!-- /ko -->
+      		<div data-bind="if:active">
+      			<li class="nav__item" ><span data-bind="text:title"></span></li>
+      		</div>
       	</ul>
     </nav>
 

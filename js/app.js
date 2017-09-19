@@ -32,7 +32,7 @@ var Location = function(data){
             icon: defaultIcon
           });
 	this.marker = ko.observable(marker);
-	this.active = ko.observable("true");
+	this.active = ko.observable(true);
 }
 
 var ViewModel = function(){
@@ -97,12 +97,12 @@ var ViewModel = function(){
 	    console.log("Length = " + this.locationList().length);
 	    for(var i=0;i<this.locationList().length;i++){
 	    	var title = this.locationList()[i].title();
-	    	
 	    	if (title.toUpperCase().indexOf(filter) > -1) {
-	    		this.locationList()[i].active("true");
+	    		this.locationList()[i].active(true);
+	    		this.locationList()[i].marker().setVisible(true);
 	    	}else{
-	    		this.locationList()[i].active("null");
-	    		console.log("Inactive title = " + title + " " + this.locationList()[i].active());
+	    		this.locationList()[i].active(false);
+	    		this.locationList()[i].marker().setVisible(false);
 	    	}
 	    }
 	};
