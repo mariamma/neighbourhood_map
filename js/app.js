@@ -1,12 +1,32 @@
+var FOURSQUARE_CLIENT_ID="3E5ADBQ2QBFKN5VLSFYLRAIBTWL1UZSBMCZZJIDB1RSSPNUO";
+var FOURSQUARE_CLIENT_SECRET = "FR33XHKOTDZN3AH2CXNNDQ3U4CXHNGFBYNMRH1JB11XMEVEZ";
 var map;
 var markers = [];
 var initialLocations=[
-		  {title: 'Park Ave Penthouse', location: {lat: 40.7713024, lng: -73.9632393}},
-          {title: 'Chelsea Loft', location: {lat: 40.7444883, lng: -73.9949465}},
-          {title: 'Union Square Open Floor Plan', location: {lat: 40.7347062, lng: -73.9895759}},
-          {title: 'East Village Hip Studio', location: {lat: 40.7281777, lng: -73.984377}},
-          {title: 'TriBeCa Artsy Bachelor Pad', location: {lat: 40.7195264, lng: -74.0089934}},
-          {title: 'Chinatown Homey Space', location: {lat: 40.7180628, lng: -73.9961237}}
+		  {title: 'Park Ave Penthouse', 
+		   fsid: '49d51ce3f964a520675c1fe3',
+		   location: {lat: 40.7713024, lng: -73.9632393}
+			},
+          {title: 'Chelsea Loft', 
+           fsid: '4e3b11853151eaa7c4399f41', 
+           location: {lat: 40.7444883, lng: -73.9949465}
+      		},
+          {title: 'Union Square Open Floor Plan', 
+           fsid: '3fd66200f964a520def11ee3',
+           location: {lat: 40.7347062, lng: -73.9895759}
+      		},
+          {title: 'East Village Hip Studio', 
+           fsid: '4f039c3993ad64af7a3a1dc3',
+           location: {lat: 40.7281777, lng: -73.984377}
+      		},
+          {title: 'TriBeCa Artsy Bachelor Pad', 
+           fsid: '5670c613498e20ec8ac58aee',	
+           location: {lat: 40.7195264, lng: -74.0089934}
+      		},
+          {title: 'Chinatown Homey Space', 
+           fsid: '4e885acb0cd6eb4081add389',
+           location: {lat: 40.7180628, lng: -73.9961237}
+      		}
 ];
 
 
@@ -24,6 +44,7 @@ function initMap() {
 var Location = function(data){
 	this.title = ko.observable(data.title);
 	this.location = ko.observable(data.location);
+	this.fsid = ko.observable(data.fsid);
 	var marker = new google.maps.Marker({
             position: data.location,
             title: data.title,
@@ -38,21 +59,17 @@ var Location = function(data){
 var ViewModel = function(){
 	var self = this;
 	this.locationList = ko.observableArray([]);
-	this.activeLocationList = ko.observableArray([]);
 
 	initialLocations.forEach(function(locationItem){
 		self.locationList.push(new Location(locationItem));
 	});
 
-	//this.activeLocationList = this.locationList;
-
 	this.locationList().forEach(function(locationItem){
-		console.log("Location : " + locationItem.location() + " " + locationItem.title());
 		var position = locationItem.location();
         var title = locationItem.title();
-        console.log("Map :: " + map);
           // Create a marker per location, and put into markers array.
         var marker = locationItem.marker();
+        var fsid = locationItem.fsid();
         locationItem.marker().addListener('mouseover', function() {
             this.setIcon(highlightedIcon);
           });
@@ -60,7 +77,7 @@ var ViewModel = function(){
             this.setIcon(defaultIcon);
           });
     	locationItem.marker().addListener('click', function() {
-            populateInfoWindow(this, largeInfowindow);
+            populateInfoWindow(this, largeInfowindow, fsid);
           });
 
         bounds.extend(marker.position);
@@ -71,14 +88,8 @@ var ViewModel = function(){
 
 	map.fitBounds(bounds);
 
-	this.locationList().forEach(function(locationItem){
-		if(locationItem.active() == "true"){
-			self.activeLocationList.push(locationItem);
-		}
-	});
-
 	this.handleLocationClick = function(location){
-		populateInfoWindow(location.marker(), largeInfowindow);
+		populateInfoWindow(location.marker(), largeInfowindow, location.fsid());
 	}
 
 	this.handleFilterKeyUp = function(){
@@ -120,7 +131,6 @@ var ViewModel = function(){
 
 ko.applyBindings(new ViewModel());
 
-		
 }
 
 function makeMarkerIcon(markerColor) {
@@ -134,15 +144,67 @@ function makeMarkerIcon(markerColor) {
         return markerImage;
       }
 
- function populateInfoWindow(marker, infowindow) {
+ function populateInfoWindow(marker, infowindow, fsid) {
         // Check to make sure the infowindow is not already opened on this marker.
         if (infowindow.marker != marker) {
           infowindow.marker = marker;
-          infowindow.setContent('<div>' + marker.title + '</div>');
-          infowindow.open(map, marker);
+          //infowindow.setContent('');
+          infowindow.setContent('<div>' + marker.title + '</div><div id="pano"></div><div id="fsinfo"></div>');
+          //infowindow.setContent('<div>' + marker.title + '</div>');
+          //infowindow.open(map, marker);
           // Make sure the marker property is cleared if the infowindow is closed.
           infowindow.addListener('closeclick', function() {
             infowindow.marker = null;
           });
+          var streetViewService = new google.maps.StreetViewService();
+          var radius = 50;
+           // panorama from that and set the options
+          function getStreetView(data, status) {
+            if (status == google.maps.StreetViewStatus.OK) {
+              var nearStreetViewLocation = data.location.latLng;
+              var heading = google.maps.geometry.spherical.computeHeading(
+                nearStreetViewLocation, marker.position);
+                //infowindow.setContent('<div>' + marker.title + '</div><div id="pano"></div>');
+                var panoramaOptions = {
+                  position: nearStreetViewLocation,
+                  pov: {
+                    heading: heading,
+                    pitch: 30
+                  }
+                };
+              var panorama = new google.maps.StreetViewPanorama(
+                document.getElementById('pano'), panoramaOptions);
+            } else {
+              infowindow.setContent('<div>' + marker.title + '</div>' +
+                '<div>No Street View Found</div>');
+            }
+          }
+          // Use streetview service to get the closest streetview image within
+          // 50 meters of the markers position
+          streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
+          // Open the infowindow on the correct marker.
+          infowindow.open(map, marker);
         }
+
+        var foursquareurl = "https://api.foursquare.com/v2/venues/" + fsid;
+	    foursquareurl += '?' + $.param({
+	    	  'v': '20170101',
+	    	  'client_id': FOURSQUARE_CLIENT_ID,
+	          'client_secret': FOURSQUARE_CLIENT_SECRET
+	        });	
+        		
+        $.ajax({
+          dataType: "json",  
+          url: foursquareurl,
+          method: 'GET',
+        }).done(function(result) {
+            var photoUrlPrefix = result.response.venue.bestPhoto.prefix;
+            var photoUrlSuffix = result.response.venue.bestPhoto.suffix;
+            var photoUrl = photoUrlPrefix + "height150" + photoUrlSuffix;
+            var shortUrl = result.response.venue.shortUrl;
+            var fsInfo = document.getElementById("fsinfo");
+            fsinfo.innerHTML = "<a href="+ shortUrl +">Foursquare Info</a>";
+        }).fail(function(err) {
+          console.log("Error while recieving foursquare data");
+        });
       }     
