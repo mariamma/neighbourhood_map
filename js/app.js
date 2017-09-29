@@ -185,7 +185,7 @@ function makeMarkerIcon(markerColor) {
           // Open the infowindow on the correct marker.
           infowindow.open(map, marker);
         }
-
+        console.log("Fsid::" + fsid);
         var foursquareurl = "https://api.foursquare.com/v2/venues/" + fsid;
 	    foursquareurl += '?' + $.param({
 	    	  'v': '20170101',
@@ -198,9 +198,9 @@ function makeMarkerIcon(markerColor) {
           url: foursquareurl,
           method: 'GET',
         }).done(function(result) {
-            var photoUrlPrefix = result.response.venue.bestPhoto.prefix;
-            var photoUrlSuffix = result.response.venue.bestPhoto.suffix;
-            var photoUrl = photoUrlPrefix + "height150" + photoUrlSuffix;
+            // var photoUrlPrefix = result.response.venue.bestPhoto.prefix;
+            // var photoUrlSuffix = result.response.venue.bestPhoto.suffix;
+            // var photoUrl = photoUrlPrefix + "height150" + photoUrlSuffix;
             var shortUrl = result.response.venue.shortUrl;
             var fsInfo = document.getElementById("fsinfo");
             fsinfo.innerHTML = "<a href="+ shortUrl +">Foursquare Info</a>";
