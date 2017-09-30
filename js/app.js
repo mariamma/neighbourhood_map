@@ -54,7 +54,7 @@ var Location = function(data){
           });
 	this.marker = ko.observable(marker);
 	this.active = ko.observable(true);
-}
+};
 
 var ViewModel = function(){
 	var self = this;
@@ -90,7 +90,7 @@ var ViewModel = function(){
 
 	this.handleLocationClick = function(location){
 		populateInfoWindow(location.marker(), largeInfowindow, location.fsid());
-	}
+	};
 
 	this.handleFilterKeyUp = function(){
 		var input, filter, ul, li, a;
@@ -113,7 +113,7 @@ var ViewModel = function(){
 		var menu = document.querySelector('#menu');
       	var drawer = document.querySelector('.nav');
 	    drawer.classList.toggle('open');
-	    var el = document.getElementById("map")
+	    var el = document.getElementById("map");
 	    var headerTag = document.getElementById("header");
 	    var menuEl = document.getElementById("menu");
 	    var slideheading = document.getElementById("slideHeading");
