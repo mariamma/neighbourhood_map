@@ -145,21 +145,7 @@ function makeMarkerIcon(markerColor) {
       }
 
  function populateInfoWindow(marker, infowindow, fsid) {
-        // Check to make sure the infowindow is not already opened on this marker.
-        if (infowindow.marker != marker) {
-          infowindow.marker = marker;
-          //infowindow.setContent('');
-          infowindow.setContent('<div>' + marker.title + '</div><div id="pano"></div><div id="fsinfo"></div>');
-          //infowindow.setContent('<div>' + marker.title + '</div>');
-          //infowindow.open(map, marker);
-          // Make sure the marker property is cleared if the infowindow is closed.
-          infowindow.addListener('closeclick', function() {
-            infowindow.marker = null;
-          });
-          var streetViewService = new google.maps.StreetViewService();
-          var radius = 50;
-           // panorama from that and set the options
-          function getStreetView(data, status) {
+        function getStreetView(data, status) {
             if (status == google.maps.StreetViewStatus.OK) {
               var nearStreetViewLocation = data.location.latLng;
               var heading = google.maps.geometry.spherical.computeHeading(
@@ -178,7 +164,22 @@ function makeMarkerIcon(markerColor) {
               infowindow.setContent('<div>' + marker.title + '</div>' +
                 '<div>No Street View Found</div>');
             }
-          };
+          }
+        // Check to make sure the infowindow is not already opened on this marker.
+        if (infowindow.marker != marker) {
+          infowindow.marker = marker;
+          //infowindow.setContent('');
+          infowindow.setContent('<div>' + marker.title + '</div><div id="pano"></div><div id="fsinfo"></div>');
+          //infowindow.setContent('<div>' + marker.title + '</div>');
+          //infowindow.open(map, marker);
+          // Make sure the marker property is cleared if the infowindow is closed.
+          infowindow.addListener('closeclick', function() {
+            infowindow.marker = null;
+          });
+          var streetViewService = new google.maps.StreetViewService();
+          var radius = 50;
+           // panorama from that and set the options
+          
 
           // Use streetview service to get the closest streetview image within
           // 50 meters of the markers position
