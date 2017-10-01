@@ -127,7 +127,7 @@ var ViewModel = function(){
 			    headerTag.style.marginLeft="300px";
 		} 
 	};
-}
+};
 
 ko.applyBindings(new ViewModel());
 
@@ -178,7 +178,8 @@ function makeMarkerIcon(markerColor) {
               infowindow.setContent('<div>' + marker.title + '</div>' +
                 '<div>No Street View Found</div>');
             }
-          }
+          };
+
           // Use streetview service to get the closest streetview image within
           // 50 meters of the markers position
           streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
@@ -187,7 +188,7 @@ function makeMarkerIcon(markerColor) {
         }
         console.log("Fsid::" + fsid);
         var foursquareurl = "https://api.foursquare.com/v2/venues/" + fsid;
-	    foursquareurl += '?' + $.param({
+	      foursquareurl += '?' + $.param({
 	    	  'v': '20170101',
 	    	  'client_id': FOURSQUARE_CLIENT_ID,
 	          'client_secret': FOURSQUARE_CLIENT_SECRET
@@ -208,3 +209,6 @@ function makeMarkerIcon(markerColor) {
           console.log("Error while recieving foursquare data");
         });
       }     
+
+
+      
