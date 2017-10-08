@@ -2,42 +2,47 @@ var FOURSQUARE_CLIENT_ID="3E5ADBQ2QBFKN5VLSFYLRAIBTWL1UZSBMCZZJIDB1RSSPNUO";
 var FOURSQUARE_CLIENT_SECRET = "FR33XHKOTDZN3AH2CXNNDQ3U4CXHNGFBYNMRH1JB11XMEVEZ";
 var map;
 var markers = [];
-var initialLocations=[
-		  {title: 'Park Ave Penthouse', 
-		   fsid: '49d51ce3f964a520675c1fe3',
-		   location: {lat: 40.7713024, lng: -73.9632393}
-			},
-          {title: 'Chelsea Loft', 
-           fsid: '4e3b11853151eaa7c4399f41', 
-           location: {lat: 40.7444883, lng: -73.9949465}
-      		},
-          {title: 'Union Square Open Floor Plan', 
-           fsid: '3fd66200f964a520def11ee3',
-           location: {lat: 40.7347062, lng: -73.9895759}
-      		},
-          {title: 'East Village Hip Studio', 
-           fsid: '4f039c3993ad64af7a3a1dc3',
-           location: {lat: 40.7281777, lng: -73.984377}
-      		},
-          {title: 'TriBeCa Artsy Bachelor Pad', 
-           fsid: '5670c613498e20ec8ac58aee',	
-           location: {lat: 40.7195264, lng: -74.0089934}
-      		},
-          {title: 'Chinatown Homey Space', 
-           fsid: '4e885acb0cd6eb4081add389',
-           location: {lat: 40.7180628, lng: -73.9961237}
-      		}
-];
+var initialLocations;
+// var initialLocations=[
+// 		  {title: 'Park Ave Penthouse', 
+// 		   fsid: '49d51ce3f964a520675c1fe3',
+// 		   location: {lat: 40.7713024, lng: -73.9632393}
+// 			},
+//           {title: 'Chelsea Loft', 
+//            fsid: '4e3b11853151eaa7c4399f41', 
+//            location: {lat: 40.7444883, lng: -73.9949465}
+//       		},
+//           {title: 'Union Square Open Floor Plan', 
+//            fsid: '3fd66200f964a520def11ee3',
+//            location: {lat: 40.7347062, lng: -73.9895759}
+//       		},
+//           {title: 'East Village Hip Studio', 
+//            fsid: '4f039c3993ad64af7a3a1dc3',
+//            location: {lat: 40.7281777, lng: -73.984377}
+//       		},
+//           {title: 'TriBeCa Artsy Bachelor Pad', 
+//            fsid: '5670c613498e20ec8ac58aee',	
+//            location: {lat: 40.7195264, lng: -74.0089934}
+//       		},
+//           {title: 'Chinatown Homey Space', 
+//            fsid: '4e885acb0cd6eb4081add389',
+//            location: {lat: 40.7180628, lng: -73.9961237}
+//       		}
+// ];
+
+
+
 
 
 function initMap() {
+
     map = new google.maps.Map(document.getElementById("map"),{
         center: {lat:40.7413549, lng:-73.99802439999996},
         zoom:13
     });
 
 	var defaultIcon = makeMarkerIcon('FF5733');
-    var highlightedIcon = makeMarkerIcon('FF0000');
+  var highlightedIcon = makeMarkerIcon('FF0000');
     var largeInfowindow = new google.maps.InfoWindow();
     var bounds = new google.maps.LatLngBounds();
 
@@ -54,41 +59,71 @@ var Location = function(data){
           });
 	this.marker = ko.observable(marker);
 	this.active = ko.observable(true);
+  this.clicked = ko.observable(false);
 };
 
 var ViewModel = function(){
 	var self = this;
 	this.locationList = ko.observableArray([]);
 
-	initialLocations.forEach(function(locationItem){
-		self.locationList.push(new Location(locationItem));
-	});
+  $.ajax({
+          dataType: "json",  
+          url: "input.json",
+          method: 'GET',
+        }).done(function(result) {
+            initialLocations = result;
+            console.log(result);
 
-	this.locationList().forEach(function(locationItem){
-		var position = locationItem.location();
-        var title = locationItem.title();
-          // Create a marker per location, and put into markers array.
-        var marker = locationItem.marker();
-        var fsid = locationItem.fsid();
-        locationItem.marker().addListener('mouseover', function() {
-            this.setIcon(highlightedIcon);
-          });
-    	locationItem.marker().addListener('mouseout', function() {
-            this.setIcon(defaultIcon);
-          });
-    	locationItem.marker().addListener('click', function() {
-            populateInfoWindow(this, largeInfowindow, fsid);
-          });
+            initialLocations.forEach(function(locationItem){
+              self.locationList.push(new Location(locationItem));
+            });
 
-        bounds.extend(marker.position);
-          // Push the marker to our array of markers.
-        markers.push(marker);
-      
-	});
+            self.locationList().forEach(function(locationItem){
+              var position = locationItem.location();
+                  var title = locationItem.title();
+                    // Create a marker per location, and put into markers array.
+                  var marker = locationItem.marker();
+                  var fsid = locationItem.fsid();
+                  locationItem.marker().addListener('mouseover', function() {
+                      this.setIcon(highlightedIcon);
+                    });
+                locationItem.marker().addListener('mouseout', function() {
+                      if(locationItem.clicked() == false){
+                        this.setIcon(defaultIcon);  
+                      }
+                    });
+                locationItem.marker().addListener('click', function() {
+                      for(var i=0;i<self.locationList().length;i++){
+                          self.locationList()[i].clicked(false);
+                          self.locationList()[i].marker().setIcon(defaultIcon);
+                        }
+                      locationItem.clicked(true);  
+                      locationItem.marker().setIcon(highlightedIcon);
+                      populateInfoWindow(this, largeInfowindow, fsid);
+                    });
 
-	map.fitBounds(bounds);
+                  bounds.extend(marker.position);
+                    // Push the marker to our array of markers.
+                  markers.push(marker);
+                
+            });
 
+            map.fitBounds(bounds);
+
+        }).fail(function(err) {
+          console.log("Error while recieving foursquare data");
+        });  
+
+	
+
+	
 	this.handleLocationClick = function(location){
+    for(var i=0;i<self.locationList().length;i++){
+      self.locationList()[i].clicked(false);
+      self.locationList()[i].marker().setIcon(defaultIcon);
+    }
+    location.clicked(true);  
+    location.marker().setIcon(highlightedIcon);
 		populateInfoWindow(location.marker(), largeInfowindow, location.fsid());
 	};
 
@@ -144,7 +179,16 @@ function makeMarkerIcon(markerColor) {
         return markerImage;
       }
 
+function highlightSelectedMarker(markerList, marker){
+    console.log("Highlight selected marker " + markerList);
+    markerList.forEach(function(markerItem){
+      markerItem.setIcon(defaultIcon);
+    });
+    marker.setIcon(highlightedIcon);
+  }; 
+
  function populateInfoWindow(marker, infowindow, fsid) {
+    var defaultIcon = makeMarkerIcon('FF5733');
         function getStreetView(data, status) {
             if (status == google.maps.StreetViewStatus.OK) {
               var nearStreetViewLocation = data.location.latLng;
@@ -174,6 +218,8 @@ function makeMarkerIcon(markerColor) {
           //infowindow.open(map, marker);
           // Make sure the marker property is cleared if the infowindow is closed.
           infowindow.addListener('closeclick', function() {
+            console.log("Closing window");
+            infowindow.marker.setIcon(defaultIcon);
             infowindow.marker = null;
           });
           var streetViewService = new google.maps.StreetViewService();
