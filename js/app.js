@@ -3,35 +3,6 @@ var FOURSQUARE_CLIENT_SECRET = "FR33XHKOTDZN3AH2CXNNDQ3U4CXHNGFBYNMRH1JB11XMEVEZ
 var map;
 var markers = [];
 var initialLocations;
-// var initialLocations=[
-// 		  {title: 'Park Ave Penthouse', 
-// 		   fsid: '49d51ce3f964a520675c1fe3',
-// 		   location: {lat: 40.7713024, lng: -73.9632393}
-// 			},
-//           {title: 'Chelsea Loft', 
-//            fsid: '4e3b11853151eaa7c4399f41', 
-//            location: {lat: 40.7444883, lng: -73.9949465}
-//       		},
-//           {title: 'Union Square Open Floor Plan', 
-//            fsid: '3fd66200f964a520def11ee3',
-//            location: {lat: 40.7347062, lng: -73.9895759}
-//       		},
-//           {title: 'East Village Hip Studio', 
-//            fsid: '4f039c3993ad64af7a3a1dc3',
-//            location: {lat: 40.7281777, lng: -73.984377}
-//       		},
-//           {title: 'TriBeCa Artsy Bachelor Pad', 
-//            fsid: '5670c613498e20ec8ac58aee',	
-//            location: {lat: 40.7195264, lng: -74.0089934}
-//       		},
-//           {title: 'Chinatown Homey Space', 
-//            fsid: '4e885acb0cd6eb4081add389',
-//            location: {lat: 40.7180628, lng: -73.9961237}
-//       		}
-// ];
-
-
-
 
 
 function initMap() {
@@ -43,8 +14,8 @@ function initMap() {
 
 	var defaultIcon = makeMarkerIcon('FF5733');
   var highlightedIcon = makeMarkerIcon('FF0000');
-    var largeInfowindow = new google.maps.InfoWindow();
-    var bounds = new google.maps.LatLngBounds();
+  var largeInfowindow = new google.maps.InfoWindow();
+  var bounds = new google.maps.LatLngBounds();
 
 var Location = function(data){
 	this.title = ko.observable(data.title);
@@ -62,9 +33,10 @@ var Location = function(data){
   this.clicked = ko.observable(false);
 };
 
-var ViewModel = function(){
+var ViewModel = function(station){
 	var self = this;
 	this.locationList = ko.observableArray([]);
+  this.stationInput = ko.observable(station);
 
   $.ajax({
           dataType: "json",  
@@ -129,8 +101,8 @@ var ViewModel = function(){
 
 	this.handleFilterKeyUp = function(){
 		var input, filter, ul, li, a;
-    	input = document.getElementById("stationinput");
-    	filter = input.value.toUpperCase();
+    	input = self.stationInput();
+    	filter = input.toUpperCase();
 	    console.log("Length = " + this.locationList().length);
 	    for(var i=0;i<this.locationList().length;i++){
 	    	var title = this.locationList()[i].title();
@@ -164,7 +136,7 @@ var ViewModel = function(){
 	};
 };
 
-ko.applyBindings(new ViewModel());
+ko.applyBindings(new ViewModel(""));
 
 }
 
