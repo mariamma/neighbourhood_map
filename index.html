@@ -6,11 +6,11 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
-	<link rel="stylesheet" type="text/css" href="responsive.css">
+	<link rel="stylesheet" href="responsive.css">
 </head>
 <body>
 	<header class="header" id="header">
-		<h2 id="slideHeading" style="color:#818181; text-align: center;">Bart Locations</h2>	
+		<h2 id="slideHeading">Bart Locations</h2>	
 		<a id="menu" class="header__menu" data-bind="click:handleMenuClick">
 		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 		    <path d="M2 6h20v3H2zm0 5h20v3H2zm0 5h20v3H2z"/>
@@ -19,7 +19,7 @@
 	</header>
 
 	<nav id="drawer" class="nav">
-		<div style="text-align: center;">
+		<div>
 		  	<input type="text" placeholder="Station location" id="stationinput" data-bind="textInput:stationInput, event:{keyup: handleFilterKeyUp}">
 		  	<a href="#" class="btn btn-info btn-md">
 	          <span class="glyphicon glyphicon-filter"></span> Filter 

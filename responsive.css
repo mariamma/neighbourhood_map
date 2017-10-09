@@ -35,6 +35,8 @@
   }
 
   #slideHeading{
+    color:#818181; 
+    text-align: center;
     z-index: 1;
     width: 300px;
     height: 100%;
@@ -50,6 +52,7 @@
   }
 
   .nav {
+    text-align: center;
     z-index: 1;
     width: 300px;
     height: 100%;

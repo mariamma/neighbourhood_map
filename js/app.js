@@ -190,8 +190,9 @@ function highlightSelectedMarker(markerList, marker){
           //infowindow.open(map, marker);
           // Make sure the marker property is cleared if the infowindow is closed.
           infowindow.addListener('closeclick', function() {
-            console.log("Closing window");
-            infowindow.marker.setIcon(defaultIcon);
+            console.log("Closing window " + infowindow.marker + " marker " + marker);
+            // infowindow.marker.setIcon(defaultIcon);
+            marker.setIcon(defaultIcon);
             infowindow.marker = null;
           });
           var streetViewService = new google.maps.StreetViewService();
@@ -226,6 +227,8 @@ function highlightSelectedMarker(markerList, marker){
             fsinfo.innerHTML = "<a href="+ shortUrl +">Foursquare Info</a>";
         }).fail(function(err) {
           console.log("Error while recieving foursquare data");
+          var fsInfo = document.getElementById("fsinfo");
+          fsinfo.innerHTML = "Four square image not available";
         });
       }     
 
