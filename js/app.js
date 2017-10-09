@@ -3,22 +3,20 @@ var FOURSQUARE_CLIENT_SECRET = "FR33XHKOTDZN3AH2CXNNDQ3U4CXHNGFBYNMRH1JB11XMEVEZ
 var map;
 var markers = [];
 var initialLocations;
-//var googleMapUrl = "https://maps.googleapis.com/maps/api/js?key=AIzaSyBxM7ybr9xCOF45j3UvwhVeq__i02U4&libraries=geometry&callback=initMap";
-var googleMapUrl = "https://maps.googleapis.com/maps/api/js?key=AIzaSyBxM7ybr9xCOF45j3UWwhVeq__i02U4&libraries=geometry&callback=initMap";
+var googleMapUrl = "https://maps.googleapis.com/maps/api/js?key=AIzaSyBxM7ybr9xCOF45j3UWwkvwhVeq__i02U4&libraries=geometry&callback=initMap";
 
 $.getScript(googleMapUrl)
-  // if getting the script is successful
-  // .done(function() {
-  //   console.log("Map loaded success");
-  // })
-  // if getting the script fails
+  .done(function() {
+    console.log("Map loaded success");
+  })
   .fail(function() {
     console.log("Map could not be loaded!!");
+    var mapInfo = document.getElementById("map");
+    mapInfo.innerHTML = "Service not availeble";
   });
 
 
 function initMap() {
-
     map = new google.maps.Map(document.getElementById("map"),{
         center: {lat:40.7413549, lng:-73.99802439999996},
         zoom:13
