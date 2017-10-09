@@ -71,7 +71,7 @@ var ViewModel = function(station){
                       this.setIcon(highlightedIcon);
                     });
                 locationItem.marker().addListener('mouseout', function() {
-                      if(locationItem.clicked() == false){
+                      if(locationItem.clicked() === false){
                         this.setIcon(defaultIcon);  
                       }
                     });
@@ -168,7 +168,7 @@ function highlightSelectedMarker(markerList, marker){
       markerItem.setIcon(defaultIcon);
     });
     marker.setIcon(highlightedIcon);
-  }; 
+  }
 
  function populateInfoWindow(marker, infowindow, fsid) {
     var defaultIcon = makeMarkerIcon('FF5733');
@@ -242,8 +242,4 @@ function highlightSelectedMarker(markerList, marker){
           fsinfo.innerHTML = "Four square image not available";
         });
       }     
-
- function mapError(){
-    console.log("Map could not be loaded!!");
- };
       
