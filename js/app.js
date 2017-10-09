@@ -3,8 +3,8 @@ var FOURSQUARE_CLIENT_SECRET = "FR33XHKOTDZN3AH2CXNNDQ3U4CXHNGFBYNMRH1JB11XMEVEZ
 var map;
 var markers = [];
 var initialLocations;
-//var googleMapUrl = "https://maps.googleapis.com/maps/api/js?key=AIzaSyBxM7ybr9xCOF45j3UWwkvwhVeq__i02U4&libraries=geometry&callback=initMap";
-var googleMapUrl = "bras";
+var googleMapUrl = "https://maps.googleapis.com/maps/api/js?key=AIzaSyBxM7ybr9xCOF45j3UWwkvwhVeq__i02U4&libraries=geometry&callback=initMap";
+//var googleMapUrl = "bras";
 
 $.getScript(googleMapUrl)
   .done(function() {
