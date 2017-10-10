@@ -35,6 +35,9 @@
 	<div id="map" data-bind="googlemap"></div>
 
 	<script src="js/lib/knockout-3.2.0.js"></script>
-  	<script src="js/app.js"></script>
+  	
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBxM7ybr9xCOF45j3UWwkvwhVeq__i02U4&libraries=geometry&callback=initMap" async defer onerror="mapError()"></script>
+    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBxM7ybr9xCOF45j3UvwhVeq__i02U4&libraries=geometry&callback=initMap"  defer onerror="mapError()"></script> -->
+    <script src="js/app.js"></script>
 </body>
 </html>

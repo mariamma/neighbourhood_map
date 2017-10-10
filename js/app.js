@@ -3,18 +3,18 @@ var FOURSQUARE_CLIENT_SECRET = "FR33XHKOTDZN3AH2CXNNDQ3U4CXHNGFBYNMRH1JB11XMEVEZ
 var map;
 var markers = [];
 var initialLocations;
-var googleMapUrl = "https://maps.googleapis.com/maps/api/js?key=AIzaSyBxM7ybr9xCOF45j3UWwkvwhVeq__i02U4&libraries=geometry&callback=initMap";
+//var googleMapUrl = "https://maps.googleapis.com/maps/api/js?key=AIzaSyBxM7ybr9xCOF45j3UWwkvwhVeq__i02U4&libraries=geometry&callback=initMap";
 //var googleMapUrl = "bras";
 
-$.getScript(googleMapUrl)
-  .done(function() {
-    console.log("Map loaded success");
-  })
-  .fail(function() {
-    console.log("Map could not be loaded!!");
-    document.body.style.backgroundColor = "white";
-    document.body.innerHTML = "<h2>Error</h2><p>An error has occured. Service not available for the moment.</p>";
-  });
+// $.getScript(googleMapUrl)
+//   .done(function() {
+//     console.log("Map loaded success");
+//   })
+//   .fail(function() {
+//     console.log("Map could not be loaded!!");
+//     document.body.style.backgroundColor = "white";
+//     document.body.innerHTML = "<h2>Error</h2><p>An error has occured. Service not available for the moment.</p>";
+//   });
 
 
 function initMap() {
@@ -243,3 +243,9 @@ function highlightSelectedMarker(markerList, marker){
         });
       }     
       
+
+  function mapError(){
+    console.log("Map could not be loaded!!");
+    document.body.style.backgroundColor = "white";
+    document.body.innerHTML = "<h2>Error</h2><p>An error has occured. Service not available for the moment.</p>";  
+  }    
