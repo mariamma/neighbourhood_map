@@ -78,7 +78,7 @@ var ViewModel = function(station){
                 locationItem.marker().addListener('click', function() {
                       marker.setAnimation(google.maps.Animation.BOUNCE);
                       setTimeout(function() {
-                          marker.setAnimation(null)
+                          marker.setAnimation(null);
                       }, 3000);
                       for(var i=0;i<self.locationList().length;i++){
                           self.locationList()[i].clicked(false);
@@ -107,7 +107,7 @@ var ViewModel = function(station){
 	this.handleLocationClick = function(location){
     location.marker().setAnimation(google.maps.Animation.BOUNCE);
     setTimeout(function() {
-      location.marker().setAnimation(null)
+      location.marker().setAnimation(null);
     }, 3000);
     for(var i=0;i<self.locationList().length;i++){
       self.locationList()[i].clicked(false);
