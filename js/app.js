@@ -76,6 +76,10 @@ var ViewModel = function(station){
                       }
                     });
                 locationItem.marker().addListener('click', function() {
+                      marker.setAnimation(google.maps.Animation.BOUNCE);
+                      setTimeout(function() {
+                          marker.setAnimation(null)
+                      }, 3000);
                       for(var i=0;i<self.locationList().length;i++){
                           self.locationList()[i].clicked(false);
                           self.locationList()[i].marker().setIcon(defaultIcon);
@@ -101,6 +105,10 @@ var ViewModel = function(station){
 
 	
 	this.handleLocationClick = function(location){
+    location.marker().setAnimation(google.maps.Animation.BOUNCE);
+    setTimeout(function() {
+      location.marker().setAnimation(null)
+    }, 3000);
     for(var i=0;i<self.locationList().length;i++){
       self.locationList()[i].clicked(false);
       self.locationList()[i].marker().setIcon(defaultIcon);
@@ -247,5 +255,6 @@ function highlightSelectedMarker(markerList, marker){
   function mapError(){
     console.log("Map could not be loaded!!");
     document.body.style.backgroundColor = "white";
+    document.body.border="solid";
     document.body.innerHTML = "<h2>Error</h2><p>An error has occured. Service not available for the moment.</p>";  
   }    
